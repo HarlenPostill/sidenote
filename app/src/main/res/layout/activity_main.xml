@@ -1,81 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_dark"
-    android:padding="6dp">
+    android:background="@color/bg_dark">
 
-    <!-- Title -->
-    <TextView
+    <!-- Main vertical layout -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My Sidenotes"
-        android:textColor="@color/text_primary"
-        android:textSize="22sp"
-        android:letterSpacing="-0.05"
-        android:fontFamily="sans-serif"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="6dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="0dp">
 
-    <!-- List area: RecyclerView scrolls behind the floating button -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notes_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="80dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never" />
-
-        <!-- Empty state -->
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="No notes yet"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <!-- New Sidenote button floats over the list -->
+        <!-- Title row -->
         <LinearLayout
-            android:id="@+id/btn_new_note"
+            android:id="@+id/title_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/bg_blue_pill"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp">
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="6dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Animated title characters go here programmatically -->
+            <LinearLayout
+                android:id="@+id/title_chars"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="New Sidenote"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:letterSpacing="-0.03"
-                android:fontFamily="sans-serif"
-                android:layout_marginEnd="5dp" />
+                android:layout_weight="1"
+                android:orientation="horizontal" />
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:src="@drawable/ic_forward"
-                android:contentDescription="@null" />
+                android:id="@+id/btn_delete"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_delete"
+                android:padding="6dp"
+                android:contentDescription="Delete note"
+                android:visibility="gone" />
 
         </LinearLayout>
 
-    </FrameLayout>
+        <!-- Content area: list and edit views side by side (via translateX) -->
+        <FrameLayout
+            android:id="@+id/content_area"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipChildren="true">
 
-</LinearLayout>
+            <!-- LIST VIEW -->
+            <FrameLayout
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notes_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="80dp"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never" />
+
+                <TextView
+                    android:id="@+id/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="No notes yet"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+            <!-- EDIT VIEW -->
+            <LinearLayout
+                android:id="@+id/edit_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/bg_note_card"
+                android:padding="15dp"
+                android:visibility="invisible">
+
+                <EditText
+                    android:id="@+id/edit_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:hint="Title"
+                    android:textColorHint="@color/text_hint"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:letterSpacing="-0.05"
+                    android:fontFamily="sans-serif"
+                    android:background="@null"
+                    android:maxLines="1"
+                    android:inputType="textCapSentences" />
+
+                <EditText
+                    android:id="@+id/edit_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:hint="Start writing..."
+                    android:textColorHint="@color/text_hint"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="16sp"
+                    android:letterSpacing="-0.05"
+                    android:fontFamily="sans-serif"
+                    android:background="@null"
+                    android:gravity="top|start"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:overScrollMode="never" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Floating action button — always on top -->
+    <LinearLayout
+        android:id="@+id/btn_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/bg_blue_pill"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/arrow_left"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_back"
+            android:layout_marginEnd="5dp"
+            android:contentDescription="@null"
+            android:visibility="invisible" />
+
+        <!-- Animated button text characters go here programmatically -->
+        <LinearLayout
+            android:id="@+id/btn_text_chars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <ImageView
+            android:id="@+id/arrow_right"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_forward"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@null" />
+
+    </LinearLayout>
+
+</FrameLayout>
