@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -27,6 +28,16 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         // Update on every scroll delta — fires continuously during fling/drag
+        val swipeController = SwipeController { position ->
+            if (position != RecyclerView.NO_POSITION) {
+                val note = notes[position]
+                NoteStorage.deleteNote(this, note.id)
+                notes.removeAt(position)
+                adapter.notifyItemRemoved(position)
+            }
+        }
+        ItemTouchHelper(swipeController).attachToRecyclerView(recyclerView)
+
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) = updateOpacities()
         })
