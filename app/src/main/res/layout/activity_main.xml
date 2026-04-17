@@ -85,6 +85,7 @@
                 android:id="@+id/edit_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="68dp"
                 android:orientation="vertical"
                 android:background="@drawable/bg_note_card"
                 android:padding="15dp"

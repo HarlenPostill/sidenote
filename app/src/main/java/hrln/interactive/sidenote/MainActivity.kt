@@ -152,14 +152,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         transitionTo(Screen.EDIT, forward = true)
-
-        if (noteId == null) {
-            editTitle.postDelayed({
-                editTitle.requestFocus()
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editTitle, InputMethodManager.SHOW_IMPLICIT)
-            }, 400)
-        }
     }
 
     fun closeNote(skipSave: Boolean = false) {
